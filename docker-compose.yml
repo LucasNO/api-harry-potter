@@ -1,0 +1,50 @@
+version: '3.1'
+services:
+  dbpostgresql:
+    image: postgres:latest
+    networks:
+      - spring-boot-network
+    container_name: dbpostgresql
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=harry_potter
+  redis:
+    image: redis:latest
+    networks:
+      - spring-boot-network
+    container_name: redis-cache
+    expose:
+      - "6379"
+    ports:
+      - "6379:6379"
+  app:
+    container_name: api-harry-potter
+    networks:
+      - spring-boot-network
+    image: api-harry-potter:latest
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://dbpostgresql/harry_potter
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+    expose:
+      - "9100"
+    ports:
+      - "9100:9100"
+    depends_on:
+      - dbpostgresql
+    links:
+      - dbpostgresql
+
+networks:
+  spring-boot-network:
+    driver: bridge

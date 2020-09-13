@@ -22,5 +22,17 @@ Para rodar o projeto é bem simples, basta ter o docker instalado na sua maquina
 
 $ docker-compose up --build
 
+Esse comando acimas sobe imagens do postgre e do redis.
+
+Depois é só rodar o seguinte comando para subir a aplicação em si.
+
+* Linux/ Mac
+
+$ ./mvnw spring-boot:run
+
+* Windows
+
+$ ./mvnw.cmd spring-boot:run
+
 ### Documentação da api
 http://localhost:9100/api/swagger-ui.html

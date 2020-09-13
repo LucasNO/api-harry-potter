@@ -13,4 +13,5 @@ public class CharacterRequest {
     private String name;
     private String role;
     private String house;
+    private String patronus;
 }

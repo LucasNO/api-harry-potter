@@ -133,7 +133,7 @@ class CharacterControllerTest {
                 .patronus("Minerva McGonagall")
                 .build();
 
-        when(service.editar(any(CharacterRequest.class))).thenReturn(response);
+        when(service.salvar(any(CharacterRequest.class))).thenReturn(response);
 
         mockMvc.perform(put(BASE_URL)
                 .content(objectMapper.writeValueAsString(request))
@@ -145,7 +145,7 @@ class CharacterControllerTest {
                 .andExpect(jsonPath("$.house", is("5a05e2b252f721a3cf2ea33f")))
                 .andExpect(jsonPath("$.patronus", is("Minerva McGonagall")));
 
-        verify(service, times(1)).editar(any(CharacterRequest.class));
+        verify(service, times(1)).salvar(any(CharacterRequest.class));
 
     }
 

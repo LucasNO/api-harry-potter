@@ -20,7 +20,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import java.time.Duration;
 import java.util.List;
@@ -58,22 +57,13 @@ public class CharacterService {
 
     @Cacheable(cacheNames = Character.CACHE_NAME, key="#id")
     public CharacterResponse buscar(Integer id){
-        Optional<Character> character = repository.findById(id);
-        if(character.isEmpty()){
-            Object[] parametros = {id.toString()};
-            throw new BusinessException(messageSource.getMessage("character.erro.buscar", parametros, Locale.ROOT));
-        }
-        return mapper.characterToDto(character.get());
+        Character character = findById(id);
+        return mapper.characterToDto(character);
     }
 
     @CacheEvict(cacheNames = Character.CACHE_NAME, allEntries = true)
     public CharacterResponse salvar(CharacterRequest dto){
-
-            Character character = mapper.dtoToCharacter(dto);
-            List<HouseDto> list = retry(dto);
-            character.setHouse(list.get(0).get_id());
-            character.setPatronus(list.get(0).getHeadOfHouse());
-            character.setSchool(list.get(0).getSchool());
+            Character character = preecherDadosHouse(dto);
         try {
             return mapper.characterToDto(repository.save(character));
         }catch (Exception e){
@@ -82,15 +72,10 @@ public class CharacterService {
         }
     }
 
-    public CharacterResponse editar(CharacterRequest dto) {
-        Character character = mapper.dtoToCharacter(dto);
-        return mapper.characterToDto(repository.save(character));
-    }
-
     @CacheEvict(cacheNames = Character.CACHE_NAME, key="#id")
     public void deletar(Integer id) {
+        Character character = findById(id);
         try {
-            Character character = repository.getOne(id);
             repository.delete(character);
         }catch (Exception e){
             Object[] parametros = {id.toString()};
@@ -113,5 +98,22 @@ public class CharacterService {
             Object[] parametros = {dto.getHouse()};
             throw new BusinessException(messageSource.getMessage("house.erro.buscar", parametros, Locale.ROOT));
         }
+    }
+
+    private Character preecherDadosHouse(CharacterRequest dto){
+        Character character = mapper.dtoToCharacter(dto);
+        List<HouseDto> list = retry(dto);
+        character.setHouse(list.get(0).get_id());
+        character.setSchool(list.get(0).getSchool());
+        return character;
+    }
+
+    private Character findById(Integer id){
+        Optional<Character> character = repository.findById(id);
+        if(character.isEmpty()){
+            Object[] parametros = {id.toString()};
+            throw new BusinessException(messageSource.getMessage("character.erro.buscar", parametros, Locale.ROOT));
+        }
+        return character.get();
     }
 }

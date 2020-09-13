@@ -11,9 +11,10 @@ spring:
     password: password
     username: postgres
     driver-class-name: org.postgresql.Driver
+    initialization-mode: always
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
   cache:
     type: redis
   redis:

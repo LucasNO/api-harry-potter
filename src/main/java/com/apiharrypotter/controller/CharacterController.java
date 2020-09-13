@@ -52,7 +52,7 @@ public class CharacterController {
     @PutMapping
     @ApiOperation("Edita character enviando formulário pelo corpo da requisição.")
     public ResponseEntity<CharacterResponse> editar(@RequestBody CharacterRequest form){
-        CharacterResponse response = service.editar(form);
+        CharacterResponse response = service.salvar(form);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

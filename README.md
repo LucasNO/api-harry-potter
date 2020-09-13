@@ -5,7 +5,7 @@ personagens de Harry Potter, fazendo uma integração com a api https://www.pott
 personagem pertence.
 
 ### Tecnologias Usadas
-Projeto feito em Java com Spring boot utilizando as seguintes tecnologias:
+Projeto feito em Java 11 com Spring boot utilizando as seguintes tecnologias:
 
 * Docker
 * Lombok (Biblioteca utilizada para redução e produtividade do código)

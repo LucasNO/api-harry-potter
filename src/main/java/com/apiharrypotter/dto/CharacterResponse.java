@@ -9,6 +9,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class CharacterResponse implements Serializable {
 
     private static final long serialVersionUID = -2039086049099486281L;

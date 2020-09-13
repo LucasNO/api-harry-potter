@@ -15,7 +15,7 @@ Projeto feito em Java com Spring boot utilizando as seguintes tecnologias:
 * Postgresql (Banco de Dados)
 * Resilience4j (Circuit Breaker e Retry)
 * Redis (Cache)
-* Junit e Spring Mock MVC (Testes)
+* Junit (Testes) e H2 (Banco de dados de teste)
 
 ### Como Rodar
 Para rodar o projeto é bem simples, basta ter o docker instalado na sua maquina e executar o seguinte comando na raiz do projeto: 

@@ -1,6 +1,7 @@
 package com.apiharrypotter.controller;
 
-import com.apiharrypotter.dto.CharacterRequest;
+import com.apiharrypotter.dto.CharacterRequestPost;
+import com.apiharrypotter.dto.CharacterRequestPut;
 import com.apiharrypotter.dto.CharacterResponse;
 import com.apiharrypotter.filter.CharacterFilter;
 import com.apiharrypotter.service.CharacterService;
@@ -44,15 +45,15 @@ public class CharacterController {
 
     @PostMapping
     @ApiOperation("Insere character enviando formulário pelo corpo da requisição.")
-    public ResponseEntity<CharacterResponse> inserir(@RequestBody CharacterRequest form){
-        CharacterResponse response = service.salvar(form);
+    public ResponseEntity<CharacterResponse> inserir(@RequestBody CharacterRequestPost form){
+        CharacterResponse response = service.inserir(form);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping
     @ApiOperation("Edita character enviando formulário pelo corpo da requisição.")
-    public ResponseEntity<CharacterResponse> editar(@RequestBody CharacterRequest form){
-        CharacterResponse response = service.salvar(form);
+    public ResponseEntity<CharacterResponse> editar(@RequestBody CharacterRequestPut form){
+        CharacterResponse response = service.editar(form);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

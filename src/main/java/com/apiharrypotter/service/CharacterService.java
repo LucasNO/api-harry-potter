@@ -1,6 +1,7 @@
 package com.apiharrypotter.service;
 
-import com.apiharrypotter.dto.CharacterRequest;
+import com.apiharrypotter.dto.CharacterRequestPost;
+import com.apiharrypotter.dto.CharacterRequestPut;
 import com.apiharrypotter.dto.CharacterResponse;
 import com.apiharrypotter.dto.HouseDto;
 import com.apiharrypotter.entity.Character;
@@ -62,8 +63,20 @@ public class CharacterService {
     }
 
     @CacheEvict(cacheNames = Character.CACHE_NAME, allEntries = true)
-    public CharacterResponse salvar(CharacterRequest dto){
-            Character character = preecherDadosHouse(dto);
+    public CharacterResponse editar(CharacterRequestPut dto){
+        Character character = mapper.dtoToCharacter(dto);
+        preecherDadosHouse(character);
+        try {
+            return mapper.characterToDto(repository.save(character));
+        }catch (Exception e){
+            log.error(e.getLocalizedMessage(),e);
+            throw new BusinessException(messageSource.getMessage("character.erro.salvar", null, Locale.ROOT));
+        }
+    }
+    @CacheEvict(cacheNames = Character.CACHE_NAME, allEntries = true)
+    public CharacterResponse inserir(CharacterRequestPost dto){
+        Character character = mapper.dtoToCharacter(dto);
+        preecherDadosHouse(character);
         try {
             return mapper.characterToDto(repository.save(character));
         }catch (Exception e){
@@ -83,29 +96,27 @@ public class CharacterService {
         }
     }
 
-    private List<HouseDto> retry(CharacterRequest dto){
+    private List<HouseDto> retry(Character character){
         try{
             RetryConfig config = RetryConfig.custom().maxAttempts(3).waitDuration(Duration.of(2, SECONDS)).build();
             RetryRegistry registry = RetryRegistry.of(config);
             Retry retry = registry.retry("findHouse", config);
 
-            Supplier<List<HouseDto>> findHouseSupplier = () -> client.findHouse(dto.getHouse());
+            Supplier<List<HouseDto>> findHouseSupplier = () -> client.findHouse(character.getHouse());
 
             Supplier<List<HouseDto>> list = Retry.decorateSupplier(retry, findHouseSupplier);
 
             return list.get();
         }catch (Exception e){
-            Object[] parametros = {dto.getHouse()};
+            Object[] parametros = {character.getHouse()};
             throw new BusinessException(messageSource.getMessage("house.erro.buscar", parametros, Locale.ROOT));
         }
     }
 
-    private Character preecherDadosHouse(CharacterRequest dto){
-        Character character = mapper.dtoToCharacter(dto);
-        List<HouseDto> list = retry(dto);
+    private void preecherDadosHouse(Character character){
+        List<HouseDto> list = retry(character);
         character.setHouse(list.get(0).get_id());
         character.setSchool(list.get(0).getSchool());
-        return character;
     }
 
     private Character findById(Integer id){

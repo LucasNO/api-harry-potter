@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CharacterRequest {
+public class CharacterRequestPut {
 
     private Integer id;
     private String name;

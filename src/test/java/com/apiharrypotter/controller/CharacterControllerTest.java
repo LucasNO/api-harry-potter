@@ -1,6 +1,7 @@
 package com.apiharrypotter.controller;
 
-import com.apiharrypotter.dto.CharacterRequest;
+import com.apiharrypotter.dto.CharacterRequestPost;
+import com.apiharrypotter.dto.CharacterRequestPut;
 import com.apiharrypotter.dto.CharacterResponse;
 import com.apiharrypotter.filter.CharacterFilter;
 import org.junit.Assert;
@@ -56,7 +57,7 @@ class CharacterControllerTest {
 
     @Test
     void inserir_201(){
-        CharacterRequest request =CharacterRequest.builder()
+        CharacterRequestPost request = CharacterRequestPost.builder()
                 .house("5a05e2b252f721a3cf2ea33f")
                 .name("Dumbledore")
                 .patronus("fenix")
@@ -69,7 +70,8 @@ class CharacterControllerTest {
 
     @Test
     void editar_200() {
-        CharacterRequest request =CharacterRequest.builder()
+        CharacterRequestPut request =CharacterRequestPut.builder()
+                .id(1)
                 .house("5a05e2b252f721a3cf2ea33f")
                 .name("Harry")
                 .patronus("stag")

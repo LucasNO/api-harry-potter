@@ -24,7 +24,7 @@ $ docker-compose up --build
 
 Esse comando acimas sobe imagens do postgre e do redis.
 
-Depois é só rodar o seguinte comando para subir a aplicação em si.
+Depois em outro terminal é só rodar o seguinte comando para subir a aplicação em si.
 
 * Linux/ Mac
 

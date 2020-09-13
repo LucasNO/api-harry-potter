@@ -72,7 +72,7 @@ public class CharacterService {
         }
     }
 
-    @CacheEvict(cacheNames = Character.CACHE_NAME, key="#id")
+    @CacheEvict(cacheNames = Character.CACHE_NAME,  allEntries = true)
     public void deletar(Integer id) {
         Character character = findById(id);
         try {
